@@ -1,0 +1,105 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PrioritizeAndRenumerate"
+        xmlns:my="clr-namespace:PrioritizeAndRenumerate"
+        xmlns:telerik="http://schemas.telerik.com/2008/xaml/presentation" x:Class="PrioritizeAndRenumerate.MainWindow"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Window.Resources>
+        <my:SimpleVM x:Key="SimpleVM" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource SimpleVM}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <telerik:RadGridView HorizontalAlignment="Left" VerticalAlignment="Top" AutoGenerateColumns="False"
+                             ItemsSource="{Binding PriorityList}">
+                             <!--SelectedItem="{Binding SelectedItem}"-->
+            <telerik:EventToCommandBehavior.EventBindings>
+                <telerik:EventBinding EventName="Loaded" Command="{Binding DataLoadedCmd}" PassEventArgsToCommand="True"/>
+                    </telerik:EventToCommandBehavior.EventBindings>
+            <telerik:RadGridView.Columns>
+                <telerik:GridViewDataColumn   
+					Header="Test Type" DataMemberBinding="{Binding PriorityID}">
+                    <telerik:GridViewDataColumn.CellEditTemplate>
+                        <DataTemplate>
+                            <telerik:RadComboBox                     
+							HorizontalAlignment="Stretch" Margin="2"   
+							DisplayMemberPath="{Binding PriorityList/PriorityID}"
+							IsEditable="True"   
+							SelectedItem="{Binding PriorityID, Mode=TwoWay}"
+                            ItemsSource="{Binding PriorityIDs, Source={StaticResource SimpleVM}}">
+                                <telerik:EventToCommandBehavior.EventBindings>
+                                    <telerik:EventBinding EventName="SelectionChanged" Command="{Binding SelectionChanged, Source={StaticResource SimpleVM}}" PassEventArgsToCommand="True"/>
+                                </telerik:EventToCommandBehavior.EventBindings>
+                            </telerik:RadComboBox>
+
+                        </DataTemplate>
+                    </telerik:GridViewDataColumn.CellEditTemplate>
+                    <!--<telerik:EventToCommandBehavior.EventBindings>
+                        <telerik:EventBinding EventName="SelectionChanged" Command="{Binding SelectionChanged}" PassEventArgsToCommand="True"/>
+                    </telerik:EventToCommandBehavior.EventBindings>-->
+                </telerik:GridViewDataColumn>
+                
+                <telerik:GridViewDataColumn
+                    DataMemberBinding="{Binding PriorityID}"
+                    >
+                </telerik:GridViewDataColumn>
+                <telerik:GridViewDataColumn
+                    DataMemberBinding="{Binding Criteria}"
+                    >
+                </telerik:GridViewDataColumn>
+                <!--<telerik:GridViewDataColumn
+                    DataMemberBinding="{Binding Details}"
+                    >
+                </telerik:GridViewDataColumn>-->
+                <telerik:GridViewDataColumn   
+					Header="Details" DataMemberBinding="{Binding Details}">
+                    <telerik:GridViewDataColumn.CellEditTemplate>
+                        <DataTemplate>
+                            <telerik:RadComboBox                     
+							HorizontalAlignment="Stretch" Margin="2"   
+							DisplayMemberPath="{Binding PriorityList/Details}"
+							IsEditable="True"   
+							SelectedItem="{Binding Details, Mode=TwoWay}"
+                            ItemsSource="{Binding DetailsList, Source={StaticResource SimpleVM}}">
+                                <telerik:EventToCommandBehavior.EventBindings>
+                                    <telerik:EventBinding EventName="SelectionChanged" Command="{Binding DetailsSelectionChanged, Source={StaticResource SimpleVM}}" PassEventArgsToCommand="True"/>
+                                </telerik:EventToCommandBehavior.EventBindings>
+                            </telerik:RadComboBox>
+                        </DataTemplate>
+                    </telerik:GridViewDataColumn.CellEditTemplate>
+                </telerik:GridViewDataColumn>
+                <telerik:GridViewDataColumn
+                    DataMemberBinding="{Binding ConditionalSelection}"
+                    >
+                    <telerik:GridViewDataColumn.CellTemplate>
+                        <DataTemplate>
+                            <telerik:RadComboBox
+                                IsEnabled="True"
+                                ItemsSource="{Binding DataContext.TestCondition1, Source={StaticResource SimpleVM}}"
+                                SelectedItem="{Binding ConditionalSelection}"
+                                >
+                                
+                            </telerik:RadComboBox>
+                        </DataTemplate>
+                    </telerik:GridViewDataColumn.CellTemplate>
+                </telerik:GridViewDataColumn>
+            </telerik:RadGridView.Columns>
+        </telerik:RadGridView>
+        <ComboBox Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top" Width="60" AlternationCount="-3" SelectedItem="{Binding PriorityIDs}">
+        </ComboBox>
+        <Button Grid.Column="1" Grid.Row="1" Height="40" Width="30" Content="X" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <telerik:EventToCommandBehavior.EventBindings>
+                <telerik:EventBinding EventName="Click" Command="{Binding XButtonClick, Source={StaticResource SimpleVM}}" PassEventArgsToCommand="True"/>
+            </telerik:EventToCommandBehavior.EventBindings>
+        </Button>
+    </Grid>
+</Window>
